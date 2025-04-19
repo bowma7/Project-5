@@ -1,0 +1,510 @@
+/**
+*   Project:  Project 5
+*   Name: Kristian Bowman
+*   Submitted: 4/18/2025
+*   
+*   I declare that the following source code was written by me, or provided
+*   by the instructor for this project. I understand that copying source
+*   code from any other source, providing source code to another student, 
+*   or leaving my code on a public web site constitutes cheating.
+*   I acknowledge that  If I am found in violation of this policy this may result
+*   in a zero grade, a permanent record on file and possibly immediate failure of the class.
+*   
+*   Reflection (1-2 paragraphs):  
+One of the most significant issues addressed was the mobile responsiveness problem that had been flagged in Project 4. The original design didn't properly adapt to smaller screen sizes. After seeing the issue I was able to create a truly responsive form that maintains functionality and visual appeal across all device sizes.
+During the testing phase, I discovered a critical validation error where the visitor form would consistently fail email validation regardless of input. After thorough debugging (including creating more robust logging), I identified that both the existing contact form and the new visitor form were using elements with the same "email" ID, causing DOM conflicts, these should've been unique ID's and this corrected the conflict.
+
+
+**/
+
+/* Base styles and reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    line-height: 1.6;
+    color: #333;
+    background-color: #f5f5f5;
+}
+
+h1, h2, h3 {
+    margin-bottom: 1rem;
+    color: #2c3e50;
+}
+
+p {
+    margin-bottom: 1rem;
+}
+
+a {
+    text-decoration: none;
+    color: #3498db;
+}
+
+ul {
+    list-style: none;
+}
+
+:root {
+    --animate-duration: 0.5s !important;
+    --animate-delay: 0.3s !important;
+}
+
+
+.nav-expandable a.animate__fadeInLeft {
+    --animate-delay: 0.1s !important;
+}
+
+.nav-expandable a.animate__fadeInLeft:nth-child(2) {
+    --animate-delay: 0.15s !important;
+}
+
+.nav-expandable a.animate__fadeInLeft:nth-child(3) {
+    --animate-delay: 0.2s !important;
+}
+
+.nav-expandable a.animate__fadeInLeft:nth-child(4) {
+    --animate-delay: 0.25s !important;
+}
+
+/* Nav transition faster */
+.nav-expandable, 
+.grid-container,
+.expand-nav {
+    transition: all 0.2s ease;
+}
+
+/* Grid Container Layout */
+.grid-container {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    min-height: 100vh;
+    transition: all 0.3s ease;
+}
+
+/* Navigation Styles */
+.nav-expandable {
+    background-color: #2c3e50;
+    color: white;
+    padding: 1rem;
+    position: relative;
+    height: 100%;
+    transition: all 0.2s ease;
+    width: 250px;
+}
+
+.nav-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid #34495e;
+}
+
+/* Show navigation by default on desktop */
+.nav-expandable ul {
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+}
+
+/* Collapsed state */
+.nav-expandable:not(.expanded) {
+    width: 80px;
+}
+
+.nav-expandable:not(.expanded) ul {
+    display: none;
+}
+
+.nav-expandable:not(.expanded) h2 {
+    display: none;
+}
+
+/* Style for the expand button */
+.expand-nav {
+    cursor: pointer;
+    font-size: 0.8rem;
+    background-color: #3498db;
+    padding: 0.5rem;
+    border-radius: 4px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: all 0.3s ease;
+}
+
+.expand-nav i {
+    font-size: 1.2em;
+}
+
+.nav-expandable a {
+    display: block;
+    color: #ecf0f1;
+    padding: 0.5rem;
+    border-radius: 4px;
+    transition: background-color 0.3s;
+}
+
+.nav-expandable a:hover, .nav-expandable a.active {
+    background-color: #3498db;
+}
+
+.nav-expandable ul li a i {
+    margin-right: 10px;
+    width: 20px;
+}
+
+/* Main Content Area */
+main {
+    padding: 1.5rem;
+    background-color: white;
+}
+
+/* Header Styles */
+header {
+    background: linear-gradient(to right, #3498db, #2c3e50);
+    color: white;
+    padding: 2rem;
+    margin-bottom: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+header h1 {
+    color: white;
+    margin-bottom: 0.5rem;
+}
+
+.header-text {
+    font-size: 1.1rem;
+    opacity: 0.9;
+}
+
+/* Content Sections */
+.content-section {
+    margin-bottom: 3rem;
+}
+
+.content-wrapper {
+    padding: 1rem;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+/* Two Column Layout */
+.two-column {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    margin: 2rem 0;
+}
+
+/* Image Gallery */
+.image-gallery {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 1.5rem;
+    margin: 1.5rem 0;
+}
+
+.image-gallery figure {
+    margin: 0;
+    position: relative;
+    overflow: hidden;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    background-color: #f8f9fa;
+}
+
+.image-gallery img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+    display: block;
+}
+
+.image-gallery figure:hover img {
+    transform: scale(1.05);
+}
+
+.image-gallery figcaption {
+    padding: 0.75rem;
+    background-color: rgba(255, 255, 255, 0.9);
+    font-size: 0.9rem;
+    color: #2c3e50;
+    text-align: center;
+}
+
+figure {
+    margin-bottom: 1.5rem;
+}
+
+figcaption {
+    font-style: italic;
+    font-size: 0.9rem;
+    color: #666;
+    text-align: center;
+    padding: 0.5rem 0;
+}
+
+/* Video Container */
+.video-container {
+    margin: 1.5rem 0;
+    position: relative;
+    width: 100%;
+    padding-bottom: 56.25%; /* 16:9 aspect ratio */
+    height: 0;
+    overflow: hidden;
+    max-width: 100%;
+}
+
+.video-container iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 8px;
+}
+
+.video-info {
+    margin-top: 1rem;
+    font-size: 0.9rem;
+    color: #666;
+}
+
+/* Tutorial Grid */
+.tutorial-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.5rem;
+    margin: 1.5rem 0;
+}
+
+.tutorial-card {
+    background-color: white;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+}
+
+.tutorial-card:hover {
+    transform: translateY(-5px);
+}
+
+.tutorial-card img {
+    width: 100%;
+    height: 200px; 
+    object-fit: cover; 
+    display: block;
+}
+
+.tutorial-card[data-tutorial="css-grid"] img {
+    object-position: center; 
+}
+
+.tutorial-card[data-tutorial="flexbox"] img {
+    object-position: center; 
+}
+
+.tutorial-card h3, .tutorial-card p {
+    padding: 0 1rem;
+}
+
+.tutorial-card h3 {
+    padding-top: 1rem;
+}
+
+.tutorial-card p {
+    padding-bottom: 1rem;
+    color: #666;
+}
+
+/* Contact Form */
+.contact-form {
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: bold;
+}
+
+input, textarea {
+    width: 100%;
+    padding: 0.8rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-family: inherit;
+    font-size: 1rem;
+}
+
+button {
+    background-color: #3498db;
+    color: white;
+    border: none;
+    padding: 0.8rem 1.5rem;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background-color 0.3s;
+}
+
+button:hover {
+    background-color: #2980b9;
+}
+
+/* Footer Styles */
+footer {
+    text-align: center;
+    padding: 2rem 0;
+    margin-top: 2rem;
+    border-top: 1px solid #eee;
+    color: #7f8c8d;
+}
+
+/* Media Queries for Responsive design */
+@media (max-width: 768px) {
+    .grid-container {
+        grid-template-columns: 1fr;
+    }
+    
+    .nav-expandable {
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        width: 100%;
+        padding: 0.5rem 1rem; /* Reduced padding for mobile */
+        background-color: #2c3e50;
+    }
+
+    .nav-header {
+        margin-bottom: 0; /* Remove bottom margin on mobile */
+        padding-bottom: 0; /* Remove bottom padding on mobile */
+        border-bottom: none; /* Remove border on mobile when collapsed */
+    }
+    
+    .nav-expandable.expanded .nav-header {
+        margin-bottom: 1rem; /* Add some space when expanded */
+        padding-bottom: 0.5rem;
+        border-bottom: 1px solid #34495e;
+    }
+
+    main {
+        padding-top: 0.5rem; /* Reduce top padding to minimize space */
+    }
+    
+    .nav-expandable ul {
+        display: none; /* Hide by default on mobile */
+    }
+    
+    .nav-expandable.expanded ul {
+        display: flex;
+    }
+    
+    .nav-expandable:not(.expanded) h2 {
+        display: block;
+    }
+    
+    .two-column {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+        margin: 1rem 0;
+    }
+    
+    .tutorial-grid {
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    }
+    
+    .image-gallery {
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    }
+    
+    .image-gallery img {
+        height: 180px;
+    }
+    
+    .content-wrapper {
+        padding: 0.8rem;
+        width: 100%;
+        max-width: 100%;
+        overflow: hidden;
+    }
+    
+    figure {
+        margin: 1rem 0;
+        max-width: 100%;
+    }
+    
+    figure img {
+        width: 100%;
+        height: auto;
+        max-width: 100%;
+        object-fit: contain;
+    }
+    
+    .video-container {
+        margin: 1rem 0;
+        width: 100%;
+        max-width: 100%;
+    }
+    
+    /* Ensure content doesn't overflow on mobile */
+    #about {
+        width: 100%;
+        max-width: 100%;
+        overflow-x: hidden;
+    }
+    
+    #about .content-wrapper {
+        padding: 0.8rem;
+    }
+    
+    #about figure {
+        width: 100%;
+        margin: 1rem 0;
+    }
+    
+    #about figure img {
+        width: 100%;
+        height: auto;
+        object-fit: contain;
+    }
+}
+
+@media (max-width: 480px) {
+    .content-wrapper {
+        padding: 0.5rem;
+    }
+    
+    .two-column {
+        gap: 0.8rem;
+    }
+    
+    figure {
+        margin: 0.8rem 0;
+    }
+    
+    .video-container {
+        margin: 0.8rem 0;
+    }
+    
+    #about .content-wrapper {
+        padding: 0.5rem;
+    }
+}

@@ -1,0 +1,373 @@
+<!--
+   Project:  Project 5
+   Name: Kristian Bowman
+   Submitted: 4/18/2025
+   
+   I declare that the following source code was written by me, or provided
+   by the instructor for this project. I understand that copying source
+   code from any other source, providing source code to another student, 
+   or leaving my code on a public web site constitutes cheating.
+   I acknowledge that  If I am found in violation of this policy this may result
+   in a zero grade, a permanent record on file and possibly immediate failure of the class.
+   
+   Reflection (1-2 paragraphs):  
+   One of the most significant issues addressed was the mobile responsiveness problem that had been flagged in Project 4. The original design didn't properly adapt to smaller screen sizes. After seeing the issue I was able to create a truly responsive form that maintains functionality and visual appeal across all device sizes.
+   During the testing phase, I discovered a critical validation error where the visitor form would consistently fail email validation regardless of input. After thorough debugging (including creating more robust logging), I identified that both the existing contact form and the new visitor form were using elements with the same "email" ID, causing DOM conflicts, these should've been unique ID's and this corrected the conflict.
+   
+-->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/visitor-form.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <title>Web Development Hub</title>
+</head>
+<body>
+
+    <!-- Theme Toggle Button -->
+    <button class="theme-toggle" id="themeToggle">
+        <i class="fas fa-moon"></i> Dark Theme
+    </button>
+
+    <div class="grid-container">
+        <!-- Navigation sidebar -->
+        <nav class="nav-expandable">
+            <div class="nav-header">
+                <h2>Nav</h2>
+                <span class="expand-nav animate__animated animate__pulse animate__infinite"><i class="fas fa-bars"></i></span>
+            </div>
+            <ul>
+                <li><a href="#" class="active animate__animated animate__fadeInLeft animate__delay-1s" data-section="home"><i class="fas fa-home"></i> Home</a></li>
+                <li><a href="#" class="animate__animated animate__fadeInLeft animate__delay-2s" data-section="about"><i class="fas fa-info-circle"></i> About</a></li>
+                <li><a href="#" class="animate__animated animate__fadeInLeft animate__delay-3s" data-section="tutorials"><i class="fas fa-book"></i> Tutorials</a></li>
+                <li><a href="#" class="animate__animated animate__fadeInLeft animate__delay-4s" data-section="contact"><i class="fas fa-envelope"></i> Contact</a></li>
+                <li><a href="#" class="animate__animated animate__fadeInLeft animate__delay-5s" data-section="visitor"><i class="fas fa-user-plus"></i> Log Visit</a></li>
+            </ul>
+        </nav>
+
+        <!-- Main content area -->
+        <main>
+            <!-- Header Section -->
+            <header>
+                <h1 class="animate__animated animate__fadeInDown">Web Development Hub</h1>
+                <p class="header-text animate__animated animate__fadeInUp animate__delay-1s">Your guide to modern web development</p>
+            </header>
+
+            <!-- Home Section -->
+            <section id="home" class="content-section">
+                <article>
+                    <h2>Welcome to Web Development Hub</h2>
+                    <div class="content-wrapper">
+                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+                        
+                        <div class="image-gallery">
+                            <figure>
+                                <img src="img/img_html_code.jpeg" alt="HTML5 Code Example" loading="lazy">
+                                <figcaption>Modern HTML5 Structure</figcaption>
+                            </figure>
+                            <figure>
+                                <img src="img/img_css.jpeg" alt="CSS3 Code Example" loading="lazy">
+                                <figcaption>CSS3 Styling Techniques</figcaption>
+                            </figure>
+                            <figure>
+                                <img src="img/img_js.png" alt="JavaScript Code Example" loading="lazy">
+                                <figcaption>JavaScript Programming</figcaption>
+                            </figure>
+                            <figure>
+                                <img src="img/img_responsive.jpeg" alt="Responsive Design Example" loading="lazy">
+                                <figcaption>Responsive Web Design</figcaption>
+                            </figure>
+                            <figure>
+                                <img src="img/img_dev_tools.png" alt="Web Development Tools" loading="lazy">
+                                <figcaption>Development Tools & Environment</figcaption>
+                            </figure>
+                        </div>
+
+                        <h3>Getting Started with Web Development</h3>
+                        <div class="video-container">
+                            <iframe 
+                                width="100%" 
+                                height="100%" 
+                                src="https://www.youtube.com/embed/erEgovG9WBs" 
+                                title="Web Development Tutorial"
+                                frameborder="0" 
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+                                allowfullscreen>
+                            </iframe>
+                            <p class="video-info">A comprehensive guide to getting started with web development, covering HTML, CSS, and JavaScript fundamentals.</p>
+                        </div>
+                    </div>
+                </article>
+            </section>
+
+            <!-- About Section -->
+            <section id="about" class="content-section" style="display: none;">
+                <article>
+                    <h2>About Web Development</h2>
+                    <div class="content-wrapper">
+                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.</p>
+                        
+                        <div class="two-column">
+                            <div>
+                                <h3>Our Mission</h3>
+                                <p>Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt.</p>
+                            </div>
+                            <div>
+                                <h3>Our Approach</h3>
+                                <p>Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem.</p>
+                            </div>
+                        </div>
+
+                        <figure>
+                            <img src="img/img_process.png" alt="Web Development Process">
+                            <figcaption>The modern web development workflow</figcaption>
+                        </figure>
+
+                        <h3>Web Development in 2024</h3>
+                        <div class="video-container">
+                            <iframe 
+                                width="100%" 
+                                height="100%" 
+                                src="https://www.youtube.com/embed/8sXRyHI3bLw" 
+                                title="Web Development in 2024"
+                                frameborder="0" 
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+                                allowfullscreen>
+                            </iframe>
+                            <p class="video-info">Discover the latest trends and technologies shaping web development in 2024.</p>
+                        </div>
+                    </div>
+                </article>
+            </section>
+
+            <!-- Tutorials Section -->
+            <section id="tutorials" class="content-section" style="display: none;">
+                <article>
+                    <h2>Web Development Tutorials</h2>
+                    <div class="content-wrapper">
+                        <div class="tutorial-grid">
+                            <div class="tutorial-card animate__animated animate__fadeInLeft">
+                                <img src="img/img_html_code.jpeg" alt="HTML Tutorial">
+                                <h3>HTML Fundamentals</h3>
+                                <p>Learn the building blocks of web pages and semantically structure your content.</p>
+                            </div>
+                            <div class="tutorial-card animate__animated animate__fadeInLeft">
+                                <img src="img/img_css.jpeg" alt="CSS Tutorial">
+                                <h3>CSS Styling</h3>
+                                <p>Master CSS to create beautiful, responsive layouts and designs.</p>
+                            </div>
+                            <div class="tutorial-card animate__animated animate__fadeInLeft">
+                                <img src="img/img_js.png" alt="JavaScript Tutorial">
+                                <h3>JavaScript Basics</h3>
+                                <p>Add interactivity and dynamic behavior to your web pages.</p>
+                            </div>
+                            <div class="tutorial-card animate__animated animate__fadeInLeft">
+                                <img src="img/img_responsive.jpeg" alt="Responsive Design Tutorial">
+                                <h3>Responsive Design</h3>
+                                <p>Create websites that work seamlessly across all devices and screen sizes.</p>
+                            </div>
+                            <div class="tutorial-card animate__animated animate__fadeInLeft">
+                                <img src="img/css_grid.png" alt="Grid Layout Tutorial">
+                                <h3>CSS Grid Layout</h3>
+                                <p>Utilize the power of CSS Grid for complex two-dimensional layouts.</p>
+                            </div>
+                            <div class="tutorial-card animate__animated animate__fadeInLeft">
+                                <img src="img/flexbox.png" alt="Flexbox Tutorial">
+                                <h3>Flexbox Techniques</h3>
+                                <p>Learn how to create flexible, one-dimensional layouts with Flexbox.</p>
+                            </div>
+                        </div>
+
+                        <h3>Featured Tutorial Video</h3>
+                        <div class="video-container">
+                            <iframe 
+                                width="100%" 
+                                height="100%" 
+                                src="https://www.youtube.com/embed/916GWv2Qs08" 
+                                title="HTML & CSS Tutorial for Beginners"
+                                frameborder="0" 
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+                                allowfullscreen>
+                            </iframe>
+                            <p class="video-info">Learn web development with this comprehensive HTML & CSS tutorial from SuperSimpleDev.</p>
+                        </div>
+                    </div>
+                </article>
+            </section>
+
+            <!-- Contact Section -->
+            <section id="contact" class="content-section" style="display: none;">
+                <article>
+                    <h2>Contact Us</h2>
+                    <div class="content-wrapper">
+                        <p>Have questions about web development? Want to suggest a tutorial topic? Reach out to us!</p>
+                        
+                        <form class="contact-form">
+                            <div class="form-group">
+                                <label for="name">Name</label>
+                                <input type="text" id="name" name="name" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="contact-email">Email</label>
+                                <input type="email" id="contact-email" name="email" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="subject">Subject</label>
+                                <input type="text" id="subject" name="subject" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="message">Message</label>
+                                <textarea id="message" name="message" rows="5" required></textarea>
+                            </div>
+                            <button type="submit">Send Message</button>
+                        </form>
+                    </div>
+                </article>
+            </section>
+            
+            <!-- Visitor Registration Section -->
+            <section id="visitor" class="content-section" style="display: none;">
+                <article>
+                    <h2>Register Your Visit</h2>
+                    <div class="content-wrapper">
+                        <p>Thank you for visiting our website! Please take a moment to register your visit and let us know how you found us.</p>
+                        
+                        <div class="visitor-form-container">
+                            <h2 class="visitor-form-title">Visitor Registration</h2>
+                            
+                            <form id="visitor-form" class="visitor-form" novalidate>
+                                <!-- Personal Information Section -->
+                                <div class="form-section">
+                                    <h3><i class="fas fa-user"></i> Personal Information</h3>
+                                    <div class="form-grid">
+                                        <div class="form-group">
+                                            <label for="first-name">First Name*</label>
+                                            <input type="text" id="first-name" name="first-name" required>
+                                            <div class="errorMsg"></div>
+                                        </div>
+                                        
+                                        <div class="form-group">
+                                            <label for="last-name">Last Name*</label>
+                                            <input type="text" id="last-name" name="last-name" required>
+                                            <div class="errorMsg"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Address Section -->
+                                <div class="form-section">
+                                    <h3><i class="fas fa-map-marker-alt"></i> Contact Information</h3>
+                                    <div class="form-grid">
+                                        <div class="form-group full-width">
+                                            <label for="address">Street Address*</label>
+                                            <input type="text" id="address" name="address" required>
+                                            <div class="errorMsg"></div>
+                                        </div>
+                                        
+                                        <div class="form-group">
+                                            <label for="city">City*</label>
+                                            <input type="text" id="city" name="city" required>
+                                            <div class="errorMsg"></div>
+                                        </div>
+                                        
+                                        <div class="form-group">
+                                            <label for="state">State (2-letter code)*</label>
+                                            <input type="text" id="state" name="state" maxlength="2" required>
+                                            <div class="errorMsg"></div>
+                                        </div>
+                                        
+                                        <div class="form-group">
+                                            <label for="zip">ZIP Code*</label>
+                                            <input type="text" id="zip" name="zip" required>
+                                            <div class="errorMsg"></div>
+                                        </div>
+                                        
+                                        <div class="form-group">
+                                            <label for="phone">Cell Phone*</label>
+                                            <input type="tel" id="phone" name="phone" placeholder="(555) 555-5555" required>
+                                            <div class="errorMsg"></div>
+                                        </div>
+                                        
+                                        <div class="form-group">
+                                            <label for="visitor-email">Email Address*</label>
+                                            <input type="email" id="visitor-email" name="email" required>
+                                            <div class="errorMsg"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- How Did You Find Us Section -->
+                                <div class="form-section">
+                                    <h3><i class="fas fa-search"></i> How Did You Find Us?*</h3>
+                                    <div id="find-method-group">
+                                        <div class="checkbox-group">
+                                            <div class="checkbox-item">
+                                                <input type="checkbox" id="find-internet" name="find-method" value="internet">
+                                                <label for="find-internet">Internet Search</label>
+                                            </div>
+                                            <div class="checkbox-item">
+                                                <input type="checkbox" id="find-friend" name="find-method" value="friend">
+                                                <label for="find-friend">Friend Referral</label>
+                                            </div>
+                                            <div class="checkbox-item">
+                                                <input type="checkbox" id="find-social" name="find-method" value="social">
+                                                <label for="find-social">Social Media</label>
+                                            </div>
+                                            <div class="checkbox-item">
+                                                <input type="checkbox" id="find-ad" name="find-method" value="ad">
+                                                <label for="find-ad">Advertisement</label>
+                                            </div>
+                                            <div class="checkbox-item">
+                                                <input type="checkbox" id="find-other" name="find-method" value="other">
+                                                <label for="find-other">Other</label>
+                                            </div>
+                                        </div>
+                                        <div class="errorMsg"></div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Comments Section -->
+                                <div class="form-section">
+                                    <h3><i class="fas fa-comment"></i> Additional Comments</h3>
+                                    <div class="form-group">
+                                        <textarea id="comments" name="comments" rows="4" placeholder="Share any additional comments or questions you may have..."></textarea>
+                                    </div>
+                                </div>
+                                
+                                <!-- Submit Button -->
+                                <button type="submit" id="submitBtn" class="submit-btn">
+                                    <i class="fas fa-paper-plane"></i> Submit Registration
+                                </button>
+                            </form>
+                            
+                            <!-- Thank You Message (Hidden Initially) -->
+                            <div id="thank-you-message" class="thank-you-message">
+                                <div class="thank-you-icon">
+                                    <i class="fas fa-check-circle"></i>
+                                </div>
+                                <h3>Thank You for Registering!</h3>
+                                <p>Your visit has been successfully logged. We appreciate your interest in Web Development Hub!</p>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+            </section>
+
+            <!-- Footer Section -->
+            <footer>
+                <p>&copy; 2025 Web Development Hub. All rights reserved.</p>
+            </footer>
+        </main>
+    </div>
+
+    <!-- JavaScript Files -->
+    <script src="js/validation.js"></script>
+    <script src="js/page.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>

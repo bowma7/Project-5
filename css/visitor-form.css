@@ -1,0 +1,427 @@
+/**
+*   Project:  Project 5
+*   Name: Kristian Bowman
+*   Submitted: 4/18/2025
+*   
+*   I declare that the following source code was written by me, or provided
+*   by the instructor for this project. I understand that copying source
+*   code from any other source, providing source code to another student, 
+*   or leaving my code on a public web site constitutes cheating.
+*   I acknowledge that  If I am found in violation of this policy this may result
+*   in a zero grade, a permanent record on file and possibly immediate failure of the class.
+*   
+*   Reflection (1-2 paragraphs):  
+One of the most significant issues addressed was the mobile responsiveness problem that had been flagged in Project 4. The original design didn't properly adapt to smaller screen sizes. After seeing the issue I was able to create a truly responsive form that maintains functionality and visual appeal across all device sizes.
+During the testing phase, I discovered a critical validation error where the visitor form would consistently fail email validation regardless of input. After thorough debugging (including creating more robust logging), I identified that both the existing contact form and the new visitor form were using elements with the same "email" ID, causing DOM conflicts, these should've been unique ID's and this corrected the conflict.
+
+
+**/
+
+.visitor-form-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 2rem;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.visitor-form-title {
+    text-align: center;
+    margin-bottom: 2rem;
+    color: #2c3e50;
+    position: relative;
+}
+
+.visitor-form-title::after {
+    content: '';
+    position: absolute;
+    bottom: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100px;
+    height: 3px;
+    background: linear-gradient(to right, #3498db, #2c3e50);
+    border-radius: 2px;
+}
+
+.form-section {
+    margin-bottom: 2rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid #eee;
+}
+
+.form-section h3 {
+    margin-bottom: 1.2rem;
+    font-size: 1.2rem;
+    color: #3498db;
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+}
+
+.form-group {
+    margin-bottom: 1.2rem;
+    position: relative;
+}
+
+.full-width {
+    grid-column: 1 / -1;
+}
+
+.visitor-form label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+    color: #2c3e50;
+}
+
+.visitor-form input[type="text"],
+.visitor-form input[type="email"],
+.visitor-form input[type="tel"],
+.visitor-form textarea,
+.visitor-form select {
+    width: 100%;
+    padding: 0.8rem 1rem;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-family: inherit;
+    font-size: 1rem;
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.visitor-form input:focus,
+.visitor-form textarea:focus,
+.visitor-form select:focus {
+    border-color: #3498db;
+    box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+    outline: none;
+}
+
+.checkbox-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-top: 0.5rem;
+}
+
+.checkbox-item {
+    display: flex;
+    align-items: center;
+    margin-right: 1rem;
+}
+
+.visitor-form input[type="checkbox"] {
+    margin-right: 0.5rem;
+    width: 18px;
+    height: 18px;
+    accent-color: #3498db;
+}
+
+.errorMsg {
+    display: none;
+    color: #e74c3c;
+    font-size: 0.85rem;
+    margin-top: 0.5rem;
+    font-weight: 500;
+    padding-left: 0.5rem;
+    border-left: 2px solid #e74c3c;
+}
+
+input.was-validated:invalid,
+textarea.was-validated:invalid,
+select.was-validated:invalid {
+    border-color: #e74c3c;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%23e74c3c' viewBox='0 0 16 16'%3E%3Cpath d='M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293 5.354 4.646z'/%3E%3C/svg%3E");
+    background-position: right 10px center;
+    background-repeat: no-repeat;
+    padding-right: 35px;
+}
+
+input.was-validated:valid,
+textarea.was-validated:valid,
+select.was-validated:valid {
+    border-color: #2ecc71;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%232ecc71' viewBox='0 0 16 16'%3E%3Cpath d='M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z'/%3E%3C/svg%3E");
+    background-position: right 10px center;
+    background-repeat: no-repeat;
+    padding-right: 35px;
+}
+
+input.was-validated:invalid ~ .errorMsg,
+textarea.was-validated:invalid ~ .errorMsg,
+select.was-validated:invalid ~ .errorMsg {
+    display: block;
+}
+
+#find-method-group.invalid .errorMsg {
+    display: block;
+}
+
+.submit-btn {
+    background: linear-gradient(to right, #3498db, #2980b9);
+    color: white;
+    border: none;
+    padding: 1rem 2rem;
+    border-radius: 6px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.3s, box-shadow 0.3s;
+    margin-top: 1rem;
+    display: block;
+    width: 100%;
+}
+
+.submit-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    background: linear-gradient(to right, #2980b9, #3498db);
+}
+
+.submit-btn:active {
+    transform: translateY(0);
+}
+
+.thank-you-message {
+    text-align: center;
+    background-color: #d4edda;
+    color: #155724;
+    padding: 2rem;
+    border-radius: 8px;
+    margin-top: 2rem;
+    display: none;
+}
+
+.thank-you-message h3 {
+    color: #155724;
+    margin-bottom: 1rem;
+}
+
+.thank-you-icon {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    color: #28a745;
+}
+
+/* Dark theme compatibility */
+:root {
+    --form-bg: white;
+    --form-text: #2c3e50;
+    --input-bg: white;
+    --input-border: #ddd;
+    --input-text: #333;
+    --accent-color: #3498db;
+    --error-color: #e74c3c;
+    --success-color: #2ecc71;
+}
+
+[data-theme="dark"] .visitor-form-container {
+    background-color: #1e1e1e;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+[data-theme="dark"] .visitor-form-title,
+[data-theme="dark"] .visitor-form label {
+    color: #e0e0e0;
+}
+
+[data-theme="dark"] .visitor-form input[type="text"],
+[data-theme="dark"] .visitor-form input[type="email"],
+[data-theme="dark"] .visitor-form input[type="tel"],
+[data-theme="dark"] .visitor-form textarea,
+[data-theme="dark"] .visitor-form select {
+    background-color: #2d2d2d;
+    border-color: #444;
+    color: #e0e0e0;
+}
+
+[data-theme="dark"] .visitor-form input:focus,
+[data-theme="dark"] .visitor-form textarea:focus,
+[data-theme="dark"] .visitor-form select:focus {
+    border-color: #bb86fc;
+    box-shadow: 0 0 0 3px rgba(187, 134, 252, 0.2);
+}
+
+[data-theme="dark"] .submit-btn {
+    background: linear-gradient(to right, #bb86fc, #7c46e3);
+}
+
+[data-theme="dark"] .submit-btn:hover {
+    background: linear-gradient(to right, #7c46e3, #bb86fc);
+}
+
+@media (max-width: 768px) {
+    .form-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+    
+    .visitor-form-container {
+        padding: 1.5rem 1rem;
+        margin: 0;
+        width: 100%;
+        max-width: 100%;
+        border-radius: 6px;
+    }
+    
+    .visitor-form-title {
+        font-size: 1.5rem;
+        margin-bottom: 1.5rem;
+    }
+    
+    .form-section {
+        margin-bottom: 1.5rem;
+        padding-bottom: 1.2rem;
+    }
+    
+    .form-section h3 {
+        font-size: 1.1rem;
+        margin-bottom: 1rem;
+    }
+    
+    .form-group {
+        margin-bottom: 1rem;
+    }
+    
+    .visitor-form input[type="text"],
+    .visitor-form input[type="email"],
+    .visitor-form input[type="tel"],
+    .visitor-form textarea,
+    .visitor-form select {
+        padding: 0.7rem;
+        font-size: 0.95rem;
+    }
+    
+    .checkbox-group {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+    
+    .checkbox-item {
+        margin-right: 0;
+        width: 100%;
+    }
+    
+    .submit-btn {
+        padding: 0.8rem 1.5rem;
+        font-size: 1rem;
+    }
+    
+    .thank-you-message {
+        padding: 1.5rem;
+    }
+    
+    .thank-you-icon {
+        font-size: 2.5rem;
+    }
+}
+
+/* Small mobile devices */
+@media (max-width: 480px) {
+    .visitor-form-container {
+        padding: 1rem 0.8rem;
+        box-shadow: none;
+        border-radius: 4px;
+    }
+    
+    .visitor-form-title {
+        font-size: 1.3rem;
+    }
+    
+    .form-section h3 {
+        font-size: 1rem;
+    }
+    
+    .visitor-form label {
+        font-size: 0.9rem;
+    }
+    
+    .visitor-form input[type="text"],
+    .visitor-form input[type="email"],
+    .visitor-form input[type="tel"],
+    .visitor-form textarea,
+    .visitor-form select {
+        padding: 0.6rem;
+        font-size: 0.9rem;
+    }
+    
+    .errorMsg {
+        font-size: 0.8rem;
+    }
+    
+    .submit-btn {
+        padding: 0.7rem 1.2rem;
+    }
+}
+
+/* Form Error Summary */
+.form-error-summary {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    background-color: #fff3f3;
+    border: 1px solid #ffcdd2;
+    border-radius: 6px;
+    padding: 1rem;
+    margin-bottom: 2rem;
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+[data-theme="dark"] .form-error-summary {
+    background-color: #3a2828;
+    border-color: #5c3232;
+}
+
+.form-error-summary .error-icon {
+    color: #e74c3c;
+    font-size: 1.5rem;
+    padding-top: 0.2rem;
+}
+
+.form-error-summary .error-content {
+    flex: 1;
+}
+
+.form-error-summary h4 {
+    color: #e74c3c;
+    margin: 0 0 0.5rem 0;
+    font-size: 1rem;
+}
+
+.form-error-summary ul {
+    margin: 0;
+    padding-left: 1.2rem;
+    color: #c0392b;
+}
+
+[data-theme="dark"] .form-error-summary h4,
+[data-theme="dark"] .form-error-summary ul {
+    color: #ff8a80;
+}
+
+.form-error-summary li {
+    margin-bottom: 0.3rem;
+}
+
+.form-error-summary li:last-child {
+    margin-bottom: 0;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.errorMsg {
+    animation: fadeIn 0.2s ease-in-out;
+}
